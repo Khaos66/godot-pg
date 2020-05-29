@@ -57,7 +57,8 @@ custom_tools = ["default"]
 
 platform_arg = ARGUMENTS.get("platform", ARGUMENTS.get("p", False))
 
-if os.name == "nt" and (platform_arg == "android" or ARGUMENTS.get("use_mingw", False)):
+if os.name == "nt" and (platform_arg == "android"
+                        or ARGUMENTS.get("use_mingw", False)):
     custom_tools = ["mingw"]
 elif platform_arg == "javascript":
     # Use generic POSIX build toolchain for Emscripten.
@@ -107,61 +108,125 @@ if profile:
 opts = Variables(customs, ARGUMENTS)
 
 # Target build options
-opts.Add("arch", "Platform-dependent architecture (arm/arm64/x86/x64/mips/...)", "")
-opts.Add(EnumVariable("bits", "Target platform bits", "default", ("default", "32", "64")))
+opts.Add("arch",
+         "Platform-dependent architecture (arm/arm64/x86/x64/mips/...)", "")
+opts.Add(
+    EnumVariable("bits", "Target platform bits", "default",
+                 ("default", "32", "64")))
 opts.Add("p", "Platform (alias for 'platform')", "")
-opts.Add("platform", "Target platform (%s)" % ("|".join(platform_list),), "")
-opts.Add(EnumVariable("target", "Compilation target", "debug", ("debug", "release_debug", "release")))
-opts.Add(EnumVariable("optimize", "Optimization type", "speed", ("speed", "size")))
+opts.Add("platform", "Target platform (%s)" % ("|".join(platform_list), ), "")
+opts.Add(
+    EnumVariable("target", "Compilation target", "debug",
+                 ("debug", "release_debug", "release")))
+opts.Add(
+    EnumVariable("optimize", "Optimization type", "speed", ("speed", "size")))
 
-opts.Add(BoolVariable("tools", "Build the tools (a.k.a. the Godot editor)", True))
+opts.Add(
+    BoolVariable("tools", "Build the tools (a.k.a. the Godot editor)", True))
 opts.Add(BoolVariable("use_lto", "Use link-time optimization", False))
-opts.Add(BoolVariable("use_precise_math_checks", "Math checks use very precise epsilon (debug option)", False))
+opts.Add(
+    BoolVariable("use_precise_math_checks",
+                 "Math checks use very precise epsilon (debug option)", False))
 
 # Components
 opts.Add(BoolVariable("deprecated", "Enable deprecated features", True))
-opts.Add(BoolVariable("minizip", "Enable ZIP archive support using minizip", True))
+opts.Add(
+    BoolVariable("minizip", "Enable ZIP archive support using minizip", True))
 opts.Add(BoolVariable("xaudio2", "Enable the XAudio2 audio driver", False))
-opts.Add("custom_modules", "A list of comma-separated directory paths containing custom modules to build.", "")
+opts.Add(
+    "custom_modules",
+    "A list of comma-separated directory paths containing custom modules to build.",
+    "")
 
 # Advanced options
-opts.Add(BoolVariable("verbose", "Enable verbose output for the compilation", False))
-opts.Add(BoolVariable("progress", "Show a progress indicator during compilation", True))
-opts.Add(EnumVariable("warnings", "Level of compilation warnings", "all", ("extra", "all", "moderate", "no")))
-opts.Add(BoolVariable("werror", "Treat compiler warnings as errors", not env_base.stable_release))
-opts.Add(BoolVariable("dev", "If yes, alias for verbose=yes warnings=extra werror=yes", False))
-opts.Add("extra_suffix", "Custom extra suffix added to the base filename of all generated binary files", "")
+opts.Add(
+    BoolVariable("verbose", "Enable verbose output for the compilation",
+                 False))
+opts.Add(
+    BoolVariable("progress", "Show a progress indicator during compilation",
+                 True))
+opts.Add(
+    EnumVariable("warnings", "Level of compilation warnings", "all",
+                 ("extra", "all", "moderate", "no")))
+opts.Add(
+    BoolVariable("werror", "Treat compiler warnings as errors",
+                 not env_base.stable_release))
+opts.Add(
+    BoolVariable("dev",
+                 "If yes, alias for verbose=yes warnings=extra werror=yes",
+                 False))
+opts.Add(
+    "extra_suffix",
+    "Custom extra suffix added to the base filename of all generated binary files",
+    "")
 opts.Add(BoolVariable("vsproj", "Generate a Visual Studio solution", False))
-opts.Add(EnumVariable("macports_clang", "Build using Clang from MacPorts", "no", ("no", "5.0", "devel")))
-opts.Add(BoolVariable("disable_3d", "Disable 3D nodes for a smaller executable", False))
-opts.Add(BoolVariable("disable_advanced_gui", "Disable advanced GUI nodes and behaviors", False))
-opts.Add(BoolVariable("no_editor_splash", "Don't use the custom splash screen for the editor", False))
-opts.Add("system_certs_path", "Use this path as SSL certificates default for editor (for package maintainers)", "")
+opts.Add(
+    EnumVariable("macports_clang", "Build using Clang from MacPorts", "no",
+                 ("no", "5.0", "devel")))
+opts.Add(
+    BoolVariable("disable_3d", "Disable 3D nodes for a smaller executable",
+                 False))
+opts.Add(
+    BoolVariable("disable_advanced_gui",
+                 "Disable advanced GUI nodes and behaviors", False))
+opts.Add(
+    BoolVariable("no_editor_splash",
+                 "Don't use the custom splash screen for the editor", False))
+opts.Add(
+    "system_certs_path",
+    "Use this path as SSL certificates default for editor (for package maintainers)",
+    "")
 
 # Thirdparty libraries
 # opts.Add(BoolVariable('builtin_assimp', "Use the built-in Assimp library", True))
-opts.Add(BoolVariable("builtin_bullet", "Use the built-in Bullet library", True))
-opts.Add(BoolVariable("builtin_certs", "Use the built-in SSL certificates bundles", True))
+opts.Add(
+    BoolVariable("builtin_bullet", "Use the built-in Bullet library", True))
+opts.Add(
+    BoolVariable("builtin_certs", "Use the built-in SSL certificates bundles",
+                 True))
 opts.Add(BoolVariable("builtin_enet", "Use the built-in ENet library", True))
-opts.Add(BoolVariable("builtin_freetype", "Use the built-in FreeType library", True))
-opts.Add(BoolVariable("builtin_glslang", "Use the built-in glslang library", True))
-opts.Add(BoolVariable("builtin_libogg", "Use the built-in libogg library", True))
-opts.Add(BoolVariable("builtin_libpng", "Use the built-in libpng library", True))
-opts.Add(BoolVariable("builtin_libtheora", "Use the built-in libtheora library", True))
-opts.Add(BoolVariable("builtin_libvorbis", "Use the built-in libvorbis library", True))
-opts.Add(BoolVariable("builtin_libvpx", "Use the built-in libvpx library", True))
-opts.Add(BoolVariable("builtin_libwebp", "Use the built-in libwebp library", True))
+opts.Add(BoolVariable("builtin_libhttp", "Use the built-in HTTP library",
+                      True))
+opts.Add(
+    BoolVariable("builtin_freetype", "Use the built-in FreeType library",
+                 True))
+opts.Add(
+    BoolVariable("builtin_glslang", "Use the built-in glslang library", True))
+opts.Add(
+    BoolVariable("builtin_libogg", "Use the built-in libogg library", True))
+opts.Add(
+    BoolVariable("builtin_libpng", "Use the built-in libpng library", True))
+opts.Add(
+    BoolVariable("builtin_libtheora", "Use the built-in libtheora library",
+                 True))
+opts.Add(
+    BoolVariable("builtin_libvorbis", "Use the built-in libvorbis library",
+                 True))
+opts.Add(
+    BoolVariable("builtin_libvpx", "Use the built-in libvpx library", True))
+opts.Add(
+    BoolVariable("builtin_libwebp", "Use the built-in libwebp library", True))
 opts.Add(BoolVariable("builtin_wslay", "Use the built-in wslay library", True))
-opts.Add(BoolVariable("builtin_mbedtls", "Use the built-in mbedTLS library", True))
-opts.Add(BoolVariable("builtin_miniupnpc", "Use the built-in miniupnpc library", True))
+opts.Add(
+    BoolVariable("builtin_mbedtls", "Use the built-in mbedTLS library", True))
+opts.Add(
+    BoolVariable("builtin_miniupnpc", "Use the built-in miniupnpc library",
+                 True))
 opts.Add(BoolVariable("builtin_opus", "Use the built-in Opus library", True))
 opts.Add(BoolVariable("builtin_pcre2", "Use the built-in PCRE2 library", True))
-opts.Add(BoolVariable("builtin_pcre2_with_jit", "Use JIT compiler for the built-in PCRE2 library", True))
-opts.Add(BoolVariable("builtin_recast", "Use the built-in Recast library", True))
+opts.Add(
+    BoolVariable("builtin_pcre2_with_jit",
+                 "Use JIT compiler for the built-in PCRE2 library", True))
+opts.Add(
+    BoolVariable("builtin_recast", "Use the built-in Recast library", True))
 opts.Add(BoolVariable("builtin_rvo2", "Use the built-in RVO2 library", True))
-opts.Add(BoolVariable("builtin_squish", "Use the built-in squish library", True))
-opts.Add(BoolVariable("builtin_vulkan", "Use the built-in Vulkan loader library and headers", True))
-opts.Add(BoolVariable("builtin_xatlas", "Use the built-in xatlas library", True))
+opts.Add(
+    BoolVariable("builtin_squish", "Use the built-in squish library", True))
+opts.Add(
+    BoolVariable("builtin_vulkan",
+                 "Use the built-in Vulkan loader library and headers", True))
+opts.Add(
+    BoolVariable("builtin_xatlas", "Use the built-in xatlas library", True))
 opts.Add(BoolVariable("builtin_zlib", "Use the built-in zlib library", True))
 opts.Add(BoolVariable("builtin_zstd", "Use the built-in Zstd library", True))
 
@@ -217,7 +282,9 @@ for name, path in modules_detected.items():
         pass
     sys.path.remove(path)
     sys.modules.pop("config")
-    opts.Add(BoolVariable("module_" + name + "_enabled", "Enable module '%s'" % (name,), enabled))
+    opts.Add(
+        BoolVariable("module_" + name + "_enabled",
+                     "Enable module '%s'" % (name, ), enabled))
 
 methods.write_modules(modules_detected)
 
@@ -276,7 +343,9 @@ else:
         print("Could not detect platform automatically. Supported platforms:")
         for x in platform_list:
             print("\t" + x)
-        print("\nPlease run SCons again and select a valid platform: platform=<string>")
+        print(
+            "\nPlease run SCons again and select a valid platform: platform=<string>"
+        )
 
     if selected_platform != "":
         print("Automatically detected platform: " + selected_platform)
@@ -285,7 +354,9 @@ else:
 if selected_platform in ["linux", "bsd", "x11"]:
     if selected_platform == "x11":
         # Deprecated alias kept for compatibility.
-        print('Platform "x11" has been renamed to "linuxbsd" in Godot 4.0. Building for platform "linuxbsd".')
+        print(
+            'Platform "x11" has been renamed to "linuxbsd" in Godot 4.0. Building for platform "linuxbsd".'
+        )
     # Alias for convenience.
     selected_platform = "linuxbsd"
     env_base["platform"] = selected_platform
@@ -306,7 +377,8 @@ if selected_platform in platform_list:
     scons_ver = env._get_major_minor_revision(scons_raw_version)
     if scons_ver >= (3, 1, 1):
         env.Tool("compilation_db", toolpath=["misc/scons"])
-        env.Alias("compiledb", env.CompilationDatabase("compile_commands.json"))
+        env.Alias("compiledb",
+                  env.CompilationDatabase("compile_commands.json"))
 
     if env["dev"]:
         env["verbose"] = True
@@ -363,7 +435,8 @@ if selected_platform in platform_list:
     # Platform specific flags
     flag_list = platform_flags[selected_platform]
     for f in flag_list:
-        if not (f[0] in ARGUMENTS):  # allow command line to override platform flags
+        if not (f[0]
+                in ARGUMENTS):  # allow command line to override platform flags
             env[f[0]] = f[1]
 
     # Must happen after the flags definition, so that they can be used by platform detect
@@ -396,16 +469,14 @@ if selected_platform in platform_list:
                 "Detected GCC 8 version < 8.4, which is not supported due to a "
                 "regression in its C++17 guaranteed copy elision support. Use a "
                 'newer GCC version, or Clang 6 or later by passing "use_llvm=yes" '
-                "to the SCons command line."
-            )
+                "to the SCons command line.")
             Exit(255)
         elif cc_version_major < 7:
             print(
                 "Detected GCC version older than 7, which does not fully support "
                 "C++17. Supported versions are GCC 7, 9 and later. Use a newer GCC "
                 'version, or Clang 6 or later by passing "use_llvm=yes" to the '
-                "SCons command line."
-            )
+                "SCons command line.")
             Exit(255)
     elif methods.using_clang(env):
         # Apple LLVM versions differ from upstream LLVM version \o/, compare
@@ -415,8 +486,7 @@ if selected_platform in platform_list:
             if vanilla and cc_version_major < 6:
                 print(
                     "Detected Clang version older than 6, which does not fully support "
-                    "C++17. Supported versions are Clang 6 and later."
-                )
+                    "C++17. Supported versions are Clang 6 and later.")
                 Exit(255)
             elif not vanilla and cc_version_major < 10:
                 print(
@@ -427,14 +497,15 @@ if selected_platform in platform_list:
         elif cc_version_major < 6:
             print(
                 "Detected Clang version older than 6, which does not fully support "
-                "C++17. Supported versions are Clang 6 and later."
-            )
+                "C++17. Supported versions are Clang 6 and later.")
             Exit(255)
 
     # Configure compiler warnings
     if env.msvc:
         # Truncations, narrowing conversions, signed/unsigned comparisons...
-        disable_nonessential_warnings = ["/wd4267", "/wd4244", "/wd4305", "/wd4018", "/wd4800"]
+        disable_nonessential_warnings = [
+            "/wd4267", "/wd4244", "/wd4305", "/wd4018", "/wd4800"
+        ]
         if env["warnings"] == "extra":
             env.Append(CCFLAGS=["/Wall"])  # Implies /W4
         elif env["warnings"] == "all":
@@ -458,18 +529,17 @@ if selected_platform in platform_list:
                 shadow_local_warning = ["-Wshadow-local"]
 
         if env["warnings"] == "extra":
-            env.Append(CCFLAGS=["-Wall", "-Wextra", "-Wno-unused-parameter"] + all_plus_warnings + shadow_local_warning)
+            env.Append(CCFLAGS=["-Wall", "-Wextra", "-Wno-unused-parameter"] +
+                       all_plus_warnings + shadow_local_warning)
             env.Append(CXXFLAGS=["-Wctor-dtor-privacy", "-Wnon-virtual-dtor"])
             if methods.using_gcc(env):
-                env.Append(
-                    CCFLAGS=[
-                        "-Walloc-zero",
-                        "-Wduplicated-branches",
-                        "-Wduplicated-cond",
-                        "-Wstringop-overflow=4",
-                        "-Wlogical-op",
-                    ]
-                )
+                env.Append(CCFLAGS=[
+                    "-Walloc-zero",
+                    "-Wduplicated-branches",
+                    "-Wduplicated-cond",
+                    "-Wstringop-overflow=4",
+                    "-Wlogical-op",
+                ])
                 # -Wnoexcept was removed temporarily due to GH-36325.
                 env.Append(CXXFLAGS=["-Wplacement-new=1"])
                 if cc_version_major >= 9:
@@ -501,7 +571,9 @@ if selected_platform in platform_list:
 
     if env["target"] == "release":
         if env["tools"]:
-            print("Tools can only be built with targets 'debug' and 'release_debug'.")
+            print(
+                "Tools can only be built with targets 'debug' and 'release_debug'."
+            )
             Exit(255)
         suffix += ".opt"
         env.Append(CPPDEFINES=["NDEBUG"])
@@ -589,8 +661,7 @@ if selected_platform in platform_list:
         if env["tools"]:
             print(
                 "Build option 'disable_3d=yes' cannot be used with 'tools=yes' (editor), "
-                "only with 'tools=no' (export template)."
-            )
+                "only with 'tools=no' (export template).")
             Exit(255)
         else:
             env.Append(CPPDEFINES=["_3D_DISABLED"])
@@ -598,8 +669,7 @@ if selected_platform in platform_list:
         if env["tools"]:
             print(
                 "Build option 'disable_advanced_gui=yes' cannot be used with 'tools=yes' (editor), "
-                "only with 'tools=no' (export template)."
-            )
+                "only with 'tools=no' (export template).")
             Exit(255)
         else:
             env.Append(CPPDEFINES=["ADVANCED_GUI_DISABLED"])
@@ -610,10 +680,9 @@ if selected_platform in platform_list:
     for x in editor_module_list:
         if not env["module_" + x + "_enabled"]:
             if env["tools"]:
-                print(
-                    "Build option 'module_" + x + "_enabled=no' cannot be used with 'tools=yes' (editor), "
-                    "only with 'tools=no' (export template)."
-                )
+                print("Build option 'module_" + x +
+                      "_enabled=no' cannot be used with 'tools=yes' (editor), "
+                      "only with 'tools=no' (export template).")
                 Exit(255)
 
     if not env["verbose"]:
@@ -622,25 +691,28 @@ if selected_platform in platform_list:
     if not env["platform"] == "server":
         env.Append(
             BUILDERS={
-                "GLES2_GLSL": env.Builder(
-                    action=run_in_subprocess(gles_builders.build_gles2_headers), suffix="glsl.gen.h", src_suffix=".glsl"
-                )
-            }
-        )
+                "GLES2_GLSL":
+                env.Builder(action=run_in_subprocess(
+                    gles_builders.build_gles2_headers),
+                            suffix="glsl.gen.h",
+                            src_suffix=".glsl")
+            })
         env.Append(
             BUILDERS={
-                "RD_GLSL": env.Builder(
-                    action=run_in_subprocess(gles_builders.build_rd_headers), suffix="glsl.gen.h", src_suffix=".glsl"
-                )
-            }
-        )
+                "RD_GLSL":
+                env.Builder(action=run_in_subprocess(
+                    gles_builders.build_rd_headers),
+                            suffix="glsl.gen.h",
+                            src_suffix=".glsl")
+            })
         env.Append(
             BUILDERS={
-                "GLSL_HEADER": env.Builder(
-                    action=run_in_subprocess(gles_builders.build_raw_headers), suffix="glsl.gen.h", src_suffix=".glsl"
-                )
-            }
-        )
+                "GLSL_HEADER":
+                env.Builder(action=run_in_subprocess(
+                    gles_builders.build_raw_headers),
+                            suffix="glsl.gen.h",
+                            src_suffix=".glsl")
+            })
 
     scons_cache_path = os.environ.get("SCONS_CACHE")
     if scons_cache_path != None:
@@ -661,7 +733,8 @@ if selected_platform in platform_list:
     SConscript("modules/SCsub")
     SConscript("main/SCsub")
 
-    SConscript("platform/" + selected_platform + "/SCsub")  # build selected platform
+    SConscript("platform/" + selected_platform +
+               "/SCsub")  # build selected platform
 
     # Microsoft Visual Studio Project Generation
     if env["vsproj"]:
@@ -686,7 +759,9 @@ elif selected_platform != "":
     for x in platform_list:
         print("\t" + x)
 
-    print("\nPlease run SCons again and select a valid platform: platform=<string>")
+    print(
+        "\nPlease run SCons again and select a valid platform: platform=<string>"
+    )
 
     if selected_platform == "list":
         # Exit early to suppress the rest of the built-in SCons messages
