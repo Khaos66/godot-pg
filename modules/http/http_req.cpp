@@ -1,6 +1,16 @@
 #include "http_req.h"
 
-void HttpReq::sendHtmlResponse(const int p_code, const String p_content) {
+void HttpReq::sendFile(const String p_path, const String p_mime_type) {
+	const char *filepath = p_path.ascii().get_data();
+	const char *type = p_mime_type.ascii().get_data();
+	const char *headers = { NULL };
+
+	httplib_send_file(ctx, conn, filepath, type, headers);
+
+	_response_send = true;
+}
+
+void HttpReq::sendHtml(const int p_code, const String p_content) {
 	CharString content = p_content.utf8();
 	const char *data = content.get_data();
 
@@ -17,7 +27,7 @@ void HttpReq::sendHtmlResponse(const int p_code, const String p_content) {
 	_response_send = true;
 }
 
-void HttpReq::sendTextResponse(const int p_code, const String p_content) {
+void HttpReq::sendText(const int p_code, const String p_content) {
 	CharString content = p_content.utf8();
 	const char *data = content.get_data();
 
@@ -49,8 +59,9 @@ bool HttpReq::is_response_send() {
 }
 
 void HttpReq::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("sendTextResponse", "code", "content"), &HttpReq::sendTextResponse);
-	ClassDB::bind_method(D_METHOD("sendHtmlResponse", "code", "content"), &HttpReq::sendHtmlResponse);
+	ClassDB::bind_method(D_METHOD("sendFile", "path", "mime_type"), &HttpReq::sendFile);
+	ClassDB::bind_method(D_METHOD("sendText", "code", "content"), &HttpReq::sendText);
+	ClassDB::bind_method(D_METHOD("sendHtml", "code", "content"), &HttpReq::sendHtml);
 	ClassDB::bind_method(D_METHOD("get_path"), &HttpReq::get_path);
 	ClassDB::bind_method(D_METHOD("get_query"), &HttpReq::get_query);
 }

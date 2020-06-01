@@ -16,8 +16,9 @@ protected:
 	static void _bind_methods();
 
 public:
-	void sendTextResponse(const int p_code, const String p_content);
-	void sendHtmlResponse(const int p_code, const String p_content);
+	void sendFile(const String p_path, const String p_mime_type);
+	void sendText(const int p_code, const String p_content);
+	void sendHtml(const int p_code, const String p_content);
 	bool is_response_send();
 	StringName get_path();
 	StringName get_query();
