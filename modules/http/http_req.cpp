@@ -1,10 +1,18 @@
 #include "http_req.h"
+#include <cstring>
+#include <string.h>
 
 void HttpReq::sendFile(const String p_path, const String p_mime_type) {
-	const char *filepath = p_path.ascii().get_data();
-	const char *type = p_mime_type.ascii().get_data();
-	const char *headers = { NULL };
+	// Godot strings have to be copied in order to work... IDK WHY!!
+	const char *p_filepath = p_path.utf8().get_data();
+	char *filepath = (char *)memalloc(strlen(p_filepath) + 1);
+	std::memcpy(filepath, p_filepath, strlen(p_filepath) + 1);
+	// Also type string
+	const char *p_type = p_mime_type.ascii().get_data();
+	char *type = (char *)memalloc(strlen(p_type) + 1);
+	std::memcpy(type, p_type, strlen(p_type) + 1);
 
+	const char *headers = { NULL };
 	httplib_send_file(ctx, conn, filepath, type, headers);
 
 	_response_send = true;
@@ -12,8 +20,14 @@ void HttpReq::sendFile(const String p_path, const String p_mime_type) {
 
 void HttpReq::sendHtml(const int p_code, const String p_content) {
 	CharString content = p_content.utf8();
-	const char *data = content.get_data();
-	const char *codeData = p_content.ascii().get_data();
+	// Godot strings have to be copied in order to work... IDK WHY!!
+	const char *p_data = content.get_data();
+	char *data = (char *)memalloc(strlen(p_data) + 1);
+	std::memcpy(data, p_data, strlen(p_data) + 1);
+	// Same here
+	const char *p_codeData = p_content.ascii().get_data();
+	char *codeData = (char *)memalloc(strlen(p_codeData) + 1);
+	std::memcpy(codeData, p_codeData, strlen(p_codeData) + 1);
 
 	// Send HTTP reply to the client
 	httplib_printf(ctx, conn,
@@ -31,7 +45,10 @@ void HttpReq::sendHtml(const int p_code, const String p_content) {
 
 void HttpReq::sendText(const String p_content) {
 	CharString content = p_content.utf8();
-	const char *data = content.get_data();
+	// Godot strings have to be copied in order to work... IDK WHY!!
+	const char *p_data = content.get_data();
+	char *data = (char *)memalloc(strlen(p_data) + 1);
+	std::memcpy(data, p_data, strlen(p_data) + 1);
 
 	// Send HTTP reply to the client
 	httplib_printf(ctx, conn,
@@ -48,7 +65,10 @@ void HttpReq::sendText(const String p_content) {
 
 void HttpReq::sendJson(const String p_content) {
 	CharString content = p_content.utf8();
-	const char *data = content.get_data();
+	// Godot strings have to be copied in order to work... IDK WHY!!
+	const char *p_data = content.get_data();
+	char *data = (char *)memalloc(strlen(p_data) + 1);
+	std::memcpy(data, p_data, strlen(p_data) + 1);
 
 	// Send HTTP reply to the client
 	httplib_printf(ctx, conn,
