@@ -17,8 +17,9 @@ protected:
 
 public:
 	void sendFile(const String p_path, const String p_mime_type);
-	void sendText(const int p_code, const String p_content);
 	void sendHtml(const int p_code, const String p_content);
+	void sendText(const String p_content);
+	void sendJson(const String p_content);
 	bool is_response_send();
 	StringName get_path();
 	StringName get_query();
