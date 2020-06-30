@@ -1,5 +1,5 @@
 /*************************************************************************/
-/*  audio_driver_media_kit.h                                             */
+/*  id_handler.js                                                        */
 /*************************************************************************/
 /*                       This file is part of:                           */
 /*                           GODOT ENGINE                                */
@@ -28,47 +28,36 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
-#include "servers/audio_server.h"
+var IDHandler = /** @constructor */ function() {
 
-#ifdef MEDIA_KIT_ENABLED
+	var ids = {};
+	var size = 0;
 
-#include "core/os/mutex.h"
-#include "core/os/thread.h"
+	this.has = function(id) {
+		return ids.hasOwnProperty(id);
+	}
 
-#include <kernel/image.h> // needed for image_id
+	this.add = function(obj) {
+		size += 1;
+		var id = crypto.getRandomValues(new Int32Array(32))[0];
+		ids[id] = obj;
+		return id;
+	}
 
-#include <SoundPlayer.h>
+	this.get = function(id) {
+		return ids[id];
+	}
 
-class AudioDriverMediaKit : public AudioDriver {
-	Mutex *mutex;
+	this.remove = function(id) {
+		size -= 1;
+		delete ids[id];
+	}
 
-	BSoundPlayer *player;
-	static int32_t *samples_in;
+	this.size = function() {
+		return size;
+	}
 
-	static void PlayBuffer(void *cookie, void *buffer, size_t size, const media_raw_audio_format &format);
-
-	unsigned int mix_rate;
-	SpeakerMode speaker_mode;
-	unsigned int buffer_size;
-	int channels;
-
-	bool active;
-
-public:
-	const char *get_name() const {
-		return "MediaKit";
-	};
-
-	virtual Error init();
-	virtual void start();
-	virtual int get_mix_rate() const;
-	virtual SpeakerMode get_speaker_mode() const;
-	virtual void lock();
-	virtual void unlock();
-	virtual void finish();
-
-	AudioDriverMediaKit();
-	~AudioDriverMediaKit();
+	this.ids = ids;
 };
 
-#endif
+Module.IDHandler = new IDHandler;
