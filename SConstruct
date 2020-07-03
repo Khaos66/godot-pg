@@ -55,7 +55,8 @@ custom_tools = ["default"]
 
 platform_arg = ARGUMENTS.get("platform", ARGUMENTS.get("p", False))
 
-if os.name == "nt" and (platform_arg == "android" or ARGUMENTS.get("use_mingw", False)):
+if os.name == "nt" and (platform_arg == "android"
+                        or ARGUMENTS.get("use_mingw", False)):
     custom_tools = ["mingw"]
 elif platform_arg == "javascript":
     # Use generic POSIX build toolchain for Emscripten.
@@ -105,65 +106,123 @@ if profile:
 opts = Variables(customs, ARGUMENTS)
 
 # Target build options
-opts.Add("arch", "Platform-dependent architecture (arm/arm64/x86/x64/mips/...)", "")
-opts.Add(EnumVariable("bits", "Target platform bits", "default", ("default", "32", "64")))
+opts.Add("arch",
+         "Platform-dependent architecture (arm/arm64/x86/x64/mips/...)", "")
+opts.Add(
+    EnumVariable("bits", "Target platform bits", "default",
+                 ("default", "32", "64")))
 opts.Add("p", "Platform (alias for 'platform')", "")
-opts.Add("platform", "Target platform (%s)" % ("|".join(platform_list),), "")
-opts.Add(EnumVariable("target", "Compilation target", "debug", ("debug", "release_debug", "release")))
-opts.Add(EnumVariable("optimize", "Optimization type", "speed", ("speed", "size")))
-opts.Add(BoolVariable("tools", "Build the tools (a.k.a. the Godot editor)", True))
+opts.Add("platform", "Target platform (%s)" % ("|".join(platform_list), ), "")
+opts.Add(
+    EnumVariable("target", "Compilation target", "debug",
+                 ("debug", "release_debug", "release")))
+opts.Add(
+    EnumVariable("optimize", "Optimization type", "speed", ("speed", "size")))
+opts.Add(
+    BoolVariable("tools", "Build the tools (a.k.a. the Godot editor)", True))
 opts.Add(BoolVariable("use_lto", "Use link-time optimization", False))
-opts.Add(BoolVariable("use_precise_math_checks", "Math checks use very precise epsilon (debug option)", False))
+opts.Add(
+    BoolVariable("use_precise_math_checks",
+                 "Math checks use very precise epsilon (debug option)", False))
 
 # Components
 opts.Add(BoolVariable("deprecated", "Enable deprecated features", True))
 opts.Add(BoolVariable("gdscript", "Enable GDScript support", True))
-opts.Add(BoolVariable("minizip", "Enable ZIP archive support using minizip", True))
+opts.Add(
+    BoolVariable("minizip", "Enable ZIP archive support using minizip", True))
 opts.Add(BoolVariable("xaudio2", "Enable the XAudio2 audio driver", False))
-opts.Add("custom_modules", "A list of comma-separated directory paths containing custom modules to build.", "")
+opts.Add(
+    "custom_modules",
+    "A list of comma-separated directory paths containing custom modules to build.",
+    "")
 
 # Advanced options
-opts.Add(BoolVariable("verbose", "Enable verbose output for the compilation", False))
-opts.Add(BoolVariable("progress", "Show a progress indicator during compilation", True))
-opts.Add(EnumVariable("warnings", "Level of compilation warnings", "all", ("extra", "all", "moderate", "no")))
+opts.Add(
+    BoolVariable("verbose", "Enable verbose output for the compilation",
+                 False))
+opts.Add(
+    BoolVariable("progress", "Show a progress indicator during compilation",
+                 True))
+opts.Add(
+    EnumVariable("warnings", "Level of compilation warnings", "all",
+                 ("extra", "all", "moderate", "no")))
 opts.Add(BoolVariable("werror", "Treat compiler warnings as errors", False))
-opts.Add(BoolVariable("dev", "If yes, alias for verbose=yes warnings=extra werror=yes", False))
-opts.Add("extra_suffix", "Custom extra suffix added to the base filename of all generated binary files", "")
+opts.Add(
+    BoolVariable("dev",
+                 "If yes, alias for verbose=yes warnings=extra werror=yes",
+                 False))
+opts.Add(
+    "extra_suffix",
+    "Custom extra suffix added to the base filename of all generated binary files",
+    "")
 opts.Add(BoolVariable("vsproj", "Generate a Visual Studio solution", False))
-opts.Add(EnumVariable("macports_clang", "Build using Clang from MacPorts", "no", ("no", "5.0", "devel")))
+opts.Add(
+    EnumVariable("macports_clang", "Build using Clang from MacPorts", "no",
+                 ("no", "5.0", "devel")))
 opts.Add(
     BoolVariable(
         "split_libmodules",
         "Split intermediate libmodules.a in smaller chunks to prevent exceeding linker command line size (forced to True when using MinGW)",
         False,
-    )
-)
-opts.Add(BoolVariable("disable_3d", "Disable 3D nodes for a smaller executable", False))
-opts.Add(BoolVariable("disable_advanced_gui", "Disable advanced GUI nodes and behaviors", False))
-opts.Add(BoolVariable("no_editor_splash", "Don't use the custom splash screen for the editor", False))
-opts.Add("system_certs_path", "Use this path as SSL certificates default for editor (for package maintainers)", "")
+    ))
+opts.Add(
+    BoolVariable("disable_3d", "Disable 3D nodes for a smaller executable",
+                 False))
+opts.Add(
+    BoolVariable("disable_advanced_gui",
+                 "Disable advanced GUI nodes and behaviors", False))
+opts.Add(
+    BoolVariable("no_editor_splash",
+                 "Don't use the custom splash screen for the editor", False))
+opts.Add(
+    "system_certs_path",
+    "Use this path as SSL certificates default for editor (for package maintainers)",
+    "")
 
 # Thirdparty libraries
 # opts.Add(BoolVariable('builtin_assimp', "Use the built-in Assimp library", True))
-opts.Add(BoolVariable("builtin_bullet", "Use the built-in Bullet library", True))
-opts.Add(BoolVariable("builtin_certs", "Use the built-in SSL certificates bundles", True))
+opts.Add(
+    BoolVariable("builtin_bullet", "Use the built-in Bullet library", True))
+opts.Add(
+    BoolVariable("builtin_certs", "Use the built-in SSL certificates bundles",
+                 True))
 opts.Add(BoolVariable("builtin_enet", "Use the built-in ENet library", True))
-opts.Add(BoolVariable("builtin_freetype", "Use the built-in FreeType library", True))
-opts.Add(BoolVariable("builtin_libogg", "Use the built-in libogg library", True))
-opts.Add(BoolVariable("builtin_libpng", "Use the built-in libpng library", True))
-opts.Add(BoolVariable("builtin_libtheora", "Use the built-in libtheora library", True))
-opts.Add(BoolVariable("builtin_libvorbis", "Use the built-in libvorbis library", True))
-opts.Add(BoolVariable("builtin_libvpx", "Use the built-in libvpx library", True))
-opts.Add(BoolVariable("builtin_libwebp", "Use the built-in libwebp library", True))
+opts.Add(
+    BoolVariable("builtin_freetype", "Use the built-in FreeType library",
+                 True))
+opts.Add(
+    BoolVariable("builtin_libogg", "Use the built-in libogg library", True))
+opts.Add(
+    BoolVariable("builtin_libhttp", "Use the built-in libhttp library", True))
+opts.Add(
+    BoolVariable("builtin_libpng", "Use the built-in libpng library", True))
+opts.Add(
+    BoolVariable("builtin_libtheora", "Use the built-in libtheora library",
+                 True))
+opts.Add(
+    BoolVariable("builtin_libvorbis", "Use the built-in libvorbis library",
+                 True))
+opts.Add(
+    BoolVariable("builtin_libvpx", "Use the built-in libvpx library", True))
+opts.Add(
+    BoolVariable("builtin_libwebp", "Use the built-in libwebp library", True))
 opts.Add(BoolVariable("builtin_wslay", "Use the built-in wslay library", True))
-opts.Add(BoolVariable("builtin_mbedtls", "Use the built-in mbedTLS library", True))
-opts.Add(BoolVariable("builtin_miniupnpc", "Use the built-in miniupnpc library", True))
+opts.Add(
+    BoolVariable("builtin_mbedtls", "Use the built-in mbedTLS library", True))
+opts.Add(
+    BoolVariable("builtin_miniupnpc", "Use the built-in miniupnpc library",
+                 True))
 opts.Add(BoolVariable("builtin_opus", "Use the built-in Opus library", True))
 opts.Add(BoolVariable("builtin_pcre2", "Use the built-in PCRE2 library", True))
-opts.Add(BoolVariable("builtin_pcre2_with_jit", "Use JIT compiler for the built-in PCRE2 library", True))
-opts.Add(BoolVariable("builtin_recast", "Use the built-in Recast library", True))
-opts.Add(BoolVariable("builtin_squish", "Use the built-in squish library", True))
-opts.Add(BoolVariable("builtin_xatlas", "Use the built-in xatlas library", True))
+opts.Add(
+    BoolVariable("builtin_pcre2_with_jit",
+                 "Use JIT compiler for the built-in PCRE2 library", True))
+opts.Add(
+    BoolVariable("builtin_recast", "Use the built-in Recast library", True))
+opts.Add(
+    BoolVariable("builtin_squish", "Use the built-in squish library", True))
+opts.Add(
+    BoolVariable("builtin_xatlas", "Use the built-in xatlas library", True))
 opts.Add(BoolVariable("builtin_zlib", "Use the built-in zlib library", True))
 opts.Add(BoolVariable("builtin_zstd", "Use the built-in Zstd library", True))
 
@@ -386,7 +445,9 @@ if selected_platform in platform_list:
     # Configure compiler warnings
     if env.msvc:
         # Truncations, narrowing conversions, signed/unsigned comparisons...
-        disable_nonessential_warnings = ["/wd4267", "/wd4244", "/wd4305", "/wd4018", "/wd4800"]
+        disable_nonessential_warnings = [
+            "/wd4267", "/wd4244", "/wd4305", "/wd4018", "/wd4800"
+        ]
         if env["warnings"] == "extra":
             env.Append(CCFLAGS=["/Wall"])  # Implies /W4
         elif env["warnings"] == "all":
@@ -414,18 +475,17 @@ if selected_platform in platform_list:
         if env["warnings"] == "extra":
             # Note: enable -Wimplicit-fallthrough for Clang (already part of -Wextra for GCC)
             # once we switch to C++11 or later (necessary for our FALLTHROUGH macro).
-            env.Append(CCFLAGS=["-Wall", "-Wextra", "-Wno-unused-parameter"] + all_plus_warnings + shadow_local_warning)
+            env.Append(CCFLAGS=["-Wall", "-Wextra", "-Wno-unused-parameter"] +
+                       all_plus_warnings + shadow_local_warning)
             env.Append(CXXFLAGS=["-Wctor-dtor-privacy", "-Wnon-virtual-dtor"])
             if methods.using_gcc(env):
-                env.Append(
-                    CCFLAGS=[
-                        "-Walloc-zero",
-                        "-Wduplicated-branches",
-                        "-Wduplicated-cond",
-                        "-Wstringop-overflow=4",
-                        "-Wlogical-op",
-                    ]
-                )
+                env.Append(CCFLAGS=[
+                    "-Walloc-zero",
+                    "-Wduplicated-branches",
+                    "-Wduplicated-cond",
+                    "-Wstringop-overflow=4",
+                    "-Wlogical-op",
+                ])
                 env.Append(CXXFLAGS=["-Wnoexcept", "-Wplacement-new=1"])
                 if version[0] >= 9:
                     env.Append(CCFLAGS=["-Wattribute-alias=2"])
@@ -494,11 +554,9 @@ if selected_platform in platform_list:
         try:
             can_build = config.can_build(env, selected_platform)
         except TypeError:
-            print(
-                "Warning: module '%s' uses a deprecated `can_build` "
-                "signature in its config.py file, it should be "
-                "`can_build(env, platform)`." % x
-            )
+            print("Warning: module '%s' uses a deprecated `can_build` "
+                  "signature in its config.py file, it should be "
+                  "`can_build(env, platform)`." % x)
             can_build = config.can_build(selected_platform)
         if can_build:
             config.configure(env)
@@ -549,8 +607,7 @@ if selected_platform in platform_list:
         if env["tools"]:
             print(
                 "Build option 'disable_3d=yes' cannot be used with 'tools=yes' (editor), "
-                "only with 'tools=no' (export template)."
-            )
+                "only with 'tools=no' (export template).")
             sys.exit(255)
         else:
             env.Append(CPPDEFINES=["_3D_DISABLED"])
@@ -560,8 +617,7 @@ if selected_platform in platform_list:
         if env["tools"]:
             print(
                 "Build option 'disable_advanced_gui=yes' cannot be used with 'tools=yes' (editor), "
-                "only with 'tools=no' (export template)."
-            )
+                "only with 'tools=no' (export template).")
             sys.exit(255)
         else:
             env.Append(CPPDEFINES=["ADVANCED_GUI_DISABLED"])
@@ -572,10 +628,9 @@ if selected_platform in platform_list:
     for x in editor_module_list:
         if not env["module_" + x + "_enabled"]:
             if env["tools"]:
-                print(
-                    "Build option 'module_" + x + "_enabled=no' cannot be used with 'tools=yes' (editor), "
-                    "only with 'tools=no' (export template)."
-                )
+                print("Build option 'module_" + x +
+                      "_enabled=no' cannot be used with 'tools=yes' (editor), "
+                      "only with 'tools=no' (export template).")
                 sys.exit(255)
 
     if not env["verbose"]:
@@ -584,18 +639,20 @@ if selected_platform in platform_list:
     if not env["platform"] == "server":  # FIXME: detect GLES3
         env.Append(
             BUILDERS={
-                "GLES3_GLSL": env.Builder(
-                    action=run_in_subprocess(gles_builders.build_gles3_headers), suffix="glsl.gen.h", src_suffix=".glsl"
-                )
-            }
-        )
+                "GLES3_GLSL":
+                env.Builder(action=run_in_subprocess(
+                    gles_builders.build_gles3_headers),
+                            suffix="glsl.gen.h",
+                            src_suffix=".glsl")
+            })
         env.Append(
             BUILDERS={
-                "GLES2_GLSL": env.Builder(
-                    action=run_in_subprocess(gles_builders.build_gles2_headers), suffix="glsl.gen.h", src_suffix=".glsl"
-                )
-            }
-        )
+                "GLES2_GLSL":
+                env.Builder(action=run_in_subprocess(
+                    gles_builders.build_gles2_headers),
+                            suffix="glsl.gen.h",
+                            src_suffix=".glsl")
+            })
 
     scons_cache_path = os.environ.get("SCONS_CACHE")
     if scons_cache_path != None:
