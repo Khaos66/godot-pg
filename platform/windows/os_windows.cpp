@@ -3508,6 +3508,14 @@ String OS_Windows::get_unique_id() const {
 	return String(HwProfInfo.szHwProfileGuid);
 }
 
+String OS_Windows::get_machine_name() const {
+
+	TCHAR  infoBuf[MAX_COMPUTERNAME_LENGTH + 1];
+	DWORD  bufCharCount = MAX_COMPUTERNAME_LENGTH + 1;
+	ERR_FAIL_COND_V(!GetComputerName(infoBuf, &bufCharCount), "");
+	return String(infoBuf);
+}
+
 void OS_Windows::set_ime_active(const bool p_active) {
 
 	if (p_active) {

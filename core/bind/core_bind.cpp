@@ -224,6 +224,10 @@ String _OS::get_unique_id() const {
 	return OS::get_singleton()->get_unique_id();
 }
 
+String _OS::get_machine_name() const {
+	return OS::get_singleton()->get_machine_name();
+}
+
 bool _OS::has_touchscreen_ui_hint() const {
 
 	return OS::get_singleton()->has_touchscreen_ui_hint();
@@ -1379,6 +1383,7 @@ void _OS::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_user_data_dir"), &_OS::get_user_data_dir);
 	ClassDB::bind_method(D_METHOD("get_system_dir", "dir"), &_OS::get_system_dir);
 	ClassDB::bind_method(D_METHOD("get_unique_id"), &_OS::get_unique_id);
+	ClassDB::bind_method(D_METHOD("get_machine_name"), &_OS::get_machine_name);
 
 	ClassDB::bind_method(D_METHOD("is_ok_left_and_cancel_right"), &_OS::is_ok_left_and_cancel_right);
 
