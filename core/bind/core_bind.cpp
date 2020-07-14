@@ -604,6 +604,10 @@ Error _OS::set_thread_name(const String &p_name) {
 	return Thread::set_name(p_name);
 };
 
+Thread::ID _OS::get_caller_id() {
+	return Thread::get_caller_id();
+};
+
 void _OS::set_use_vsync(bool p_enable) {
 	OS::get_singleton()->set_use_vsync(p_enable);
 }
@@ -1396,6 +1400,7 @@ void _OS::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("alert", "text", "title"), &_OS::alert, DEFVAL("Alert!"));
 
 	ClassDB::bind_method(D_METHOD("set_thread_name", "name"), &_OS::set_thread_name);
+	ClassDB::bind_method(D_METHOD("get_caller_id"), &_OS::get_caller_id);
 
 	ClassDB::bind_method(D_METHOD("set_use_vsync", "enable"), &_OS::set_use_vsync);
 	ClassDB::bind_method(D_METHOD("is_vsync_enabled"), &_OS::is_vsync_enabled);
