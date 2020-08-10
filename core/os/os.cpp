@@ -507,6 +507,12 @@ String OS::get_unique_id() const {
 	ERR_FAIL_V("");
 }
 
+String OS::get_machine_name() const {
+
+	ERR_FAIL_V("");
+}
+
+
 int OS::get_processor_count() const {
 
 	return 1;

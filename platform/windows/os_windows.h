@@ -535,6 +535,8 @@ public:
 
 	virtual String get_unique_id() const;
 
+	virtual String get_machine_name() const;
+
 	virtual void set_ime_active(const bool p_active);
 	virtual void set_ime_position(const Point2 &p_pos);
 
