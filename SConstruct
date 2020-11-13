@@ -187,25 +187,15 @@ opts.Add(
     BoolVariable("builtin_certs", "Use the built-in SSL certificates bundles",
                  True))
 opts.Add(BoolVariable("builtin_enet", "Use the built-in ENet library", True))
-opts.Add(
-    BoolVariable("builtin_freetype", "Use the built-in FreeType library",
-                 True))
-opts.Add(
-    BoolVariable("builtin_libogg", "Use the built-in libogg library", True))
-opts.Add(
-    BoolVariable("builtin_libhttp", "Use the built-in libhttp library", True))
-opts.Add(
-    BoolVariable("builtin_libpng", "Use the built-in libpng library", True))
-opts.Add(
-    BoolVariable("builtin_libtheora", "Use the built-in libtheora library",
-                 True))
-opts.Add(
-    BoolVariable("builtin_libvorbis", "Use the built-in libvorbis library",
-                 True))
-opts.Add(
-    BoolVariable("builtin_libvpx", "Use the built-in libvpx library", True))
-opts.Add(
-    BoolVariable("builtin_libwebp", "Use the built-in libwebp library", True))
+opts.Add(BoolVariable("builtin_freetype", "Use the built-in FreeType library", True))
+opts.Add(BoolVariable("builtin_libhttp", "Use the built-in libhttp library", True))
+opts.Add(BoolVariable("builtin_libogg", "Use the built-in libogg library", True))
+opts.Add(BoolVariable("builtin_libhttp", "Use the built-in libhttp library", True))
+opts.Add(BoolVariable("builtin_libpng", "Use the built-in libpng library", True))
+opts.Add(BoolVariable("builtin_libtheora", "Use the built-in libtheora library", True))
+opts.Add(BoolVariable("builtin_libvorbis", "Use the built-in libvorbis library", True))
+opts.Add(BoolVariable("builtin_libvpx", "Use the built-in libvpx library", True))
+opts.Add(BoolVariable("builtin_libwebp", "Use the built-in libwebp library", True))
 opts.Add(BoolVariable("builtin_wslay", "Use the built-in wslay library", True))
 opts.Add(
     BoolVariable("builtin_mbedtls", "Use the built-in mbedTLS library", True))
@@ -469,6 +459,7 @@ if selected_platform in platform_list:
         all_plus_warnings = ["-Wwrite-strings"]
 
         if methods.using_gcc(env):
+            env.Append(CCFLAGS=["-Wno-misleading-indentation"])
             if version[0] >= 7:
                 shadow_local_warning = ["-Wshadow-local"]
 

@@ -178,6 +178,8 @@ public:
 	virtual Point2 get_screen_position(int p_screen = -1) const;
 	virtual Size2 get_screen_size(int p_screen = -1) const;
 	virtual int get_screen_dpi(int p_screen = -1) const;
+	virtual float get_screen_scale(int p_screen = -1) const;
+	virtual float get_screen_max_scale() const;
 	virtual Point2 get_window_position() const;
 	virtual void set_window_position(const Point2 &p_position);
 	virtual Size2 get_max_window_size() const;
@@ -254,7 +256,7 @@ public:
 	void dump_resources_to_file(const String &p_file);
 
 	bool has_virtual_keyboard() const;
-	void show_virtual_keyboard(const String &p_existing_text = "");
+	void show_virtual_keyboard(const String &p_existing_text = "", bool p_multiline = false);
 	void hide_virtual_keyboard();
 	int get_virtual_keyboard_height();
 
@@ -268,6 +270,8 @@ public:
 	bool is_debug_build() const;
 
 	String get_unique_id() const;
+
+	String get_machine_name() const;
 
 	String get_scancode_string(uint32_t p_code) const;
 	bool is_scancode_unicode(uint32_t p_unicode) const;
@@ -347,6 +351,7 @@ public:
 	bool is_ok_left_and_cancel_right() const;
 
 	Error set_thread_name(const String &p_name);
+	Thread::ID get_caller_id();
 
 	void set_use_vsync(bool p_enable);
 	bool is_vsync_enabled() const;

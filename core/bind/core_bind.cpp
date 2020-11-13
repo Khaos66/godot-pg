@@ -224,6 +224,10 @@ String _OS::get_unique_id() const {
 	return OS::get_singleton()->get_unique_id();
 }
 
+String _OS::get_machine_name() const {
+	return OS::get_singleton()->get_machine_name();
+}
+
 bool _OS::has_touchscreen_ui_hint() const {
 
 	return OS::get_singleton()->has_touchscreen_ui_hint();
@@ -318,6 +322,14 @@ Size2 _OS::get_screen_size(int p_screen) const {
 int _OS::get_screen_dpi(int p_screen) const {
 
 	return OS::get_singleton()->get_screen_dpi(p_screen);
+}
+
+float _OS::get_screen_scale(int p_screen) const {
+	return OS::get_singleton()->get_screen_scale(p_screen);
+}
+
+float _OS::get_screen_max_scale() const {
+	return OS::get_singleton()->get_screen_max_scale();
 }
 
 Point2 _OS::get_window_position() const {
@@ -602,6 +614,10 @@ bool _OS::is_ok_left_and_cancel_right() const {
 Error _OS::set_thread_name(const String &p_name) {
 
 	return Thread::set_name(p_name);
+};
+
+Thread::ID _OS::get_caller_id() {
+	return Thread::get_caller_id();
 };
 
 void _OS::set_use_vsync(bool p_enable) {
@@ -1060,8 +1076,8 @@ bool _OS::has_virtual_keyboard() const {
 	return OS::get_singleton()->has_virtual_keyboard();
 }
 
-void _OS::show_virtual_keyboard(const String &p_existing_text) {
-	OS::get_singleton()->show_virtual_keyboard(p_existing_text, Rect2());
+void _OS::show_virtual_keyboard(const String &p_existing_text, bool p_multiline) {
+	OS::get_singleton()->show_virtual_keyboard(p_existing_text, Rect2(), p_multiline);
 }
 
 void _OS::hide_virtual_keyboard() {
@@ -1252,6 +1268,8 @@ void _OS::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_screen_position", "screen"), &_OS::get_screen_position, DEFVAL(-1));
 	ClassDB::bind_method(D_METHOD("get_screen_size", "screen"), &_OS::get_screen_size, DEFVAL(-1));
 	ClassDB::bind_method(D_METHOD("get_screen_dpi", "screen"), &_OS::get_screen_dpi, DEFVAL(-1));
+	ClassDB::bind_method(D_METHOD("get_screen_scale", "screen"), &_OS::get_screen_scale, DEFVAL(-1));
+	ClassDB::bind_method(D_METHOD("get_screen_max_scale"), &_OS::get_screen_max_scale);
 	ClassDB::bind_method(D_METHOD("get_window_position"), &_OS::get_window_position);
 	ClassDB::bind_method(D_METHOD("set_window_position", "position"), &_OS::set_window_position);
 	ClassDB::bind_method(D_METHOD("get_window_size"), &_OS::get_window_size);
@@ -1362,7 +1380,7 @@ void _OS::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("dump_memory_to_file", "file"), &_OS::dump_memory_to_file);
 	ClassDB::bind_method(D_METHOD("dump_resources_to_file", "file"), &_OS::dump_resources_to_file);
 	ClassDB::bind_method(D_METHOD("has_virtual_keyboard"), &_OS::has_virtual_keyboard);
-	ClassDB::bind_method(D_METHOD("show_virtual_keyboard", "existing_text"), &_OS::show_virtual_keyboard, DEFVAL(""));
+	ClassDB::bind_method(D_METHOD("show_virtual_keyboard", "existing_text", "multiline"), &_OS::show_virtual_keyboard, DEFVAL(""), DEFVAL(false));
 	ClassDB::bind_method(D_METHOD("hide_virtual_keyboard"), &_OS::hide_virtual_keyboard);
 	ClassDB::bind_method(D_METHOD("get_virtual_keyboard_height"), &_OS::get_virtual_keyboard_height);
 	ClassDB::bind_method(D_METHOD("print_resources_in_use", "short"), &_OS::print_resources_in_use, DEFVAL(false));
@@ -1375,6 +1393,7 @@ void _OS::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_user_data_dir"), &_OS::get_user_data_dir);
 	ClassDB::bind_method(D_METHOD("get_system_dir", "dir"), &_OS::get_system_dir);
 	ClassDB::bind_method(D_METHOD("get_unique_id"), &_OS::get_unique_id);
+	ClassDB::bind_method(D_METHOD("get_machine_name"), &_OS::get_machine_name);
 
 	ClassDB::bind_method(D_METHOD("is_ok_left_and_cancel_right"), &_OS::is_ok_left_and_cancel_right);
 
@@ -1396,6 +1415,7 @@ void _OS::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("alert", "text", "title"), &_OS::alert, DEFVAL("Alert!"));
 
 	ClassDB::bind_method(D_METHOD("set_thread_name", "name"), &_OS::set_thread_name);
+	ClassDB::bind_method(D_METHOD("get_caller_id"), &_OS::get_caller_id);
 
 	ClassDB::bind_method(D_METHOD("set_use_vsync", "enable"), &_OS::set_use_vsync);
 	ClassDB::bind_method(D_METHOD("is_vsync_enabled"), &_OS::is_vsync_enabled);
