@@ -163,7 +163,7 @@ void OS_JavaScript::set_window_size(const Size2 p_size) {
 			return window.devicePixelRatio || 1;
 		});
 		emscripten_set_canvas_element_size(canvas_id.utf8().get_data(), p_size.x * scale, p_size.y * scale);
-		emscripten_set_element_css_size(canvas_id.utf8().get_data(), p_size.x, p_size.y);
+		//emscripten_set_element_css_size(canvas_id.utf8().get_data(), p_size.x, p_size.y);
 	}
 }
 
