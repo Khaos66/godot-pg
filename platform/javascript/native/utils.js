@@ -44,7 +44,7 @@ Module["copyToFS"] = function(path, buffer) {
         FS.mkdirTree(dir);
     }
     // With memory growth, canOwn should be false.
-    FS.writeFile(path, new Uint8Array(buffer), { flags: "wx+" });
+    FS.writeFile(path, new Uint8Array(buffer), { flags: "w+" });
 };
 
 Module.drop_handler = (function() {
